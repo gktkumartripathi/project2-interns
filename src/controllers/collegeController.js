@@ -29,7 +29,7 @@ const collegeCreate = async function (req, res) {
 
         const requestBody = req.body
 
-        const { logoLink } = requestBody
+        const { name, fullName, logoLink } = requestBody
 
         if (!isValidRequestBody(requestBody)) {
             res.status(400).send({ status: false, message: "invalid request parametere,provide college details" })
@@ -39,10 +39,23 @@ const collegeCreate = async function (req, res) {
             res.status(400).send({ status: false, message: "college name is required" })
             return
         }
+
+        const namePattern = /^[a-z]((?![? .,'-]$)[ .]?[a-z]){1,10}$/gi
+
+        if (!name.match(namePattern)) {
+            return res.status(400).send({ status: false, msg: "This is not a valid Name" })
+        }
         if (!isValid(requestBody.fullName)) {
             res.status(400).send({ status: false, message: "full name is required" })
             return
         }
+
+        const fullNamePattern = /^[a-z]((?![? .,'-]$)[ .]?[a-z]){3,150}$/gi
+
+        if (!fullName.match(fullNamePattern)) {
+            return res.status(400).send({ status: false, msg: "This is not a valid full Name" })
+        }
+
         if (!isValid(requestBody.logoLink)) {
 
             res.status(400).send({ status: false, message: "logoLink is required" })
