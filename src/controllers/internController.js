@@ -28,7 +28,7 @@ const internCreate = async function (req, res) {
 
         let requestBody = req.body
 
-        const { name,mobile,email,collegeName } = requestBody
+        const { name, mobile, email } = requestBody
         if (!isValidRequestBody(requestBody)) {
 
             res.status(400).send({ status: false, Message: "invalid request body provide intern details" })
@@ -44,45 +44,55 @@ const internCreate = async function (req, res) {
         if (!name.match(namePattern)) {
             return res.status(400).send({ status: false, msg: "This is not a valid Name" })
         }
+        // name unique validation
 
+        let nameCheck = await internModel.findOne({ name: requestBody.name })
+        if (nameCheck) {
+            return res.status(400).send({ status: false, message: "this name already exists" })
+        }
+
+        //email req.body validation
         if (!isValid(requestBody.email)) {
-            res.status(400).send({ status: false, Message: "email is required" })
+            res.status(400).send({ status: false, message: "email is required" })
             return
         }
+
+        //email validations with regex
+        const emailPattern = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})/
+        if (!email.match(emailPattern)) {
+            return res.status(400).send({ status: false, msg: "This is not a valid email" })
+        }
+
+        //email unique validation
+        let emailCheck = await internModel.findOne({ email: requestBody.email })
+        if (emailCheck) {
+            return res.status(400).send({ status: false, message: "this email exists" })
+        }
+
+
         if (!isValid(requestBody.mobile)) {
             res.status(400).send({ status: false, Message: "mobile is required" })
             return
         }
+
+        const mobiles = mobile.replace(/\s+/g, '')
+        const mobilePattern = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/g
+        if (!mobiles.match(mobilePattern)) {
+            return res.status(400).send({ status: false, msg: "This is not a valid Mobile Number" })
+        }
+
+        //number unique validation
+        let mobileCheck = await internModel.findOne({ mobile: requestBody.mobile })
+        if (mobileCheck) {
+            return res.status(400).send({ status: false, message: "mobile number already exists" })
+
+        }
+
         if (!isValid(requestBody.collegeName)) {
             res.status(400).send({ status: false, message: "collegename is required" })
             return
         }
-        //email unique validation
-        if (!isValid(requestBody.email)) {
-            res.status(400).send({ status: false, message: "email exists" })
-            return
-        }
-         
-        const mobiles = mobile.replace(/\s+/g, '')
 
-        const mobilePattern = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/g
-        if(!mobiles.match(mobilePattern)){
-            return res.status(400).send({status : false, msg : "This is not a valid Mobile Number"})
-        } 
-
-      //email validations with regex
-       const emailPattern = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})/
-      if(!email.match(emailPattern)){
-       return res.status(400).send({status : false, msg : "This is not a valid email"})
-           }       
-
-        // number unique
-        //    let checkNumber=requestBody.mobile
-        //    let chcekNum2=(/^[0-9]{10}/.test(requestBody.mobile))
-        //    if(!checkNumber.length===10 && chcekNum2){
-        //        return res.status(400).send({status:false,message:"enter valid mobile number"})
-        //    }
-        //validate college existance
         const collegeId = await collegeModel.findOne({ name: requestBody.collegeName })
         if (!collegeId) {
             return res.status(400).send({ status: false, message: "college not found" })
@@ -90,31 +100,12 @@ const internCreate = async function (req, res) {
         if (collegeId.isDeleted === true) {
             return res.status(400).send({ status: false, message: " college is deleted" })
         }
-        //email unique validation
-        let emailCheck = await internModel.find({ email: requestBody.email })
-        if (!emailCheck) {
-            return res.status(400).send({ status: false, message: "this email exists" })
-        }
 
-        //email format validation 
+        //creating data intern
 
-        // if (!(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test({email:requestBody.email}))){
-
-        //     return res.status(400).send({ status: false, message: 'email should be a valid email address' })
-        // }
-
-
-
-        //number unique validation
-        let mobileCheck = await internModel.find({ mobile: requestBody.mobile })
-        if (!mobileCheck) {
-            return res.status(400).send({ status: false, message: "mobile number already exists" })
-
-        }
-        //creating data intern 
         req.body.collegeId = collegeId._id
         const internCreate = await internModel.create(requestBody)
-        res.status(400).send({ status: false, data: internCreate, message: "created intern" })
+        res.status(201).send({ status: true, data: internCreate, message: "created intern" })
 
     } catch (error) {
 

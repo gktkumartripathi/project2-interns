@@ -118,7 +118,6 @@ const collegeDetails = async function (req, res) {
             ({ "_id": 1, "name": 1, "email": 1, "mobile": 1 })
 
 
-        const interns = internDetails
         const data = { name: name, fullName: fullName, logoLink: logoLink, interns: internDetails }
         return res.status(200).send({ status: true, data: data })
     }
