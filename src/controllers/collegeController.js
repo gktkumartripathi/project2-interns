@@ -1,6 +1,7 @@
 const collegeModel = require('../models/collegeModel')
 const internModel = require('../models/internModel')
 const validUrl = require('valid-url')
+
 //globally we are validating functions  user entry
 
 const isValid = function (value) {

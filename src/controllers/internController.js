@@ -28,7 +28,7 @@ const internCreate = async function (req, res) {
 
         let requestBody = req.body
 
-        const { name } = requestBody
+        const { name,mobile,email,collegeName } = requestBody
         if (!isValidRequestBody(requestBody)) {
 
             res.status(400).send({ status: false, Message: "invalid request body provide intern details" })
@@ -62,6 +62,20 @@ const internCreate = async function (req, res) {
             res.status(400).send({ status: false, message: "email exists" })
             return
         }
+         
+        const mobiles = mobile.replace(/\s+/g, '')
+
+        const mobilePattern = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/g
+        if(!mobiles.match(mobilePattern)){
+            return res.status(400).send({status : false, msg : "This is not a valid Mobile Number"})
+        } 
+
+      //email validations with regex
+       const emailPattern = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})/
+      if(!email.match(emailPattern)){
+       return res.status(400).send({status : false, msg : "This is not a valid email"})
+           }       
+
         // number unique
         //    let checkNumber=requestBody.mobile
         //    let chcekNum2=(/^[0-9]{10}/.test(requestBody.mobile))

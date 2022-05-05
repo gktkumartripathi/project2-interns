@@ -13,7 +13,7 @@ email:{
     required:true,
     lowercase:true,
     unique:true,
-  match:  [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+//   match:  [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
 
 },
 mobile:{
@@ -21,7 +21,8 @@ mobile:{
     type:String,
     unique:true,
     required:true, 
-    match:  /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/
+    // match:  /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/g
+
 
 
 
