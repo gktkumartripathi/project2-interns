@@ -125,3 +125,5 @@ College details
   }
 }
 
+ "https://functionup.s3.ap-south-1.amazonaws.com/colleges/iith.png"
+    

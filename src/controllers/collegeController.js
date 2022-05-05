@@ -1,6 +1,6 @@
 const collegeModel = require('../models/collegeModel')
 const internModel = require('../models/internModel')
-
+const validUrl = require('valid-url')
 //globally we are validating functions  user entry
 
 const isValid = function (value) {
@@ -28,6 +28,9 @@ const collegeCreate = async function (req, res) {
         // performing major validation
 
         const requestBody = req.body
+
+        const { logoLink } = requestBody
+
         if (!isValidRequestBody(requestBody)) {
             res.status(400).send({ status: false, message: "invalid request parametere,provide college details" })
             return
@@ -46,6 +49,12 @@ const collegeCreate = async function (req, res) {
             return
         }
 
+        // Url type validation
+
+        if (!validUrl.isUri(logoLink)) {
+            return res.status(400).send({ status: false, msg: 'logoLink is not a valid url type' })
+
+        }
 
         let uniqueNameCheck = await collegeModel.findOne({ name: requestBody.name })
         if (uniqueNameCheck) {
@@ -56,6 +65,12 @@ const collegeCreate = async function (req, res) {
         if (uniqueFullNameCheck) {
             return res.status(400).send({ status: false, message: "this full name already exist" })
         }
+
+        let uniqueLogoLinkUrl = await collegeModel.findOne({ logoLink: requestBody.logoLink })
+        if (uniqueLogoLinkUrl) {
+            return res.status(400).send({ status: false, message: "this logoLink Url already exist" })
+        }
+
         //validation ends
 
         let collegeCreate = await collegeModel.create(requestBody)
