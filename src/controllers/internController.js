@@ -76,7 +76,7 @@ const internCreate = async function (req, res) {
         }
 
         const mobiles = mobile.replace(/\s+/g, '')
-        const mobilePattern = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/g
+        const mobilePattern = /^(?:(?:\+|0{0,2})+91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/g
         if (!mobiles.match(mobilePattern)) {
             return res.status(400).send({ status: false, msg: "This is not a valid Mobile Number" })
         }

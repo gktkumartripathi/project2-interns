@@ -51,7 +51,7 @@ const collegeCreate = async function (req, res) {
             return
         }
 
-        const fullNamePattern = /^[a-z]((?![? .,'-]$)[ .]?[a-z]){3,150}$/gi
+        const fullNamePattern = /^[a-z]((?![? .,'-]$)[ .]?[a-z,]){3,150}$/gi
 
         if (!fullName.match(fullNamePattern)) {
             return res.status(400).send({ status: false, msg: "This is not a valid full Name" })
