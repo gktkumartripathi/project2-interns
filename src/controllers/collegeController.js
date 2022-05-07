@@ -18,7 +18,7 @@ const isValid = function (value) {
 //here we are validating request body
 
 const isValidRequestBody = function (requestBody) {
-    return Object.keys(requestBody.length > 0)
+    return Object.keys(requestBody).length > 0
 }
 
 

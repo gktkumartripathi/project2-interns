@@ -18,7 +18,7 @@ const isValid = function (value) {
 //here we are validating request body
 
 const isValidRequestBody = function (requestBody) {
-    return Object.keys(requestBody.length > 0)
+    return Object.keys(requestBody).length>0
 }
 
 
@@ -76,7 +76,8 @@ const internCreate = async function (req, res) {
         }
 
         const mobiles = mobile.replace(/\s+/g, '')
-        const mobilePattern = /^(?:(?:\+|0{0,2})+91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/g
+        const mobilePattern = /^(\+91)?0?[6-9]\d{9}$/
+        
         if (!mobiles.match(mobilePattern)) {
             return res.status(400).send({ status: false, msg: "This is not a valid Mobile Number" })
         }
